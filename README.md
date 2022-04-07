@@ -1,7 +1,7 @@
-# cordova-plugin-jpush-custom
+### cordova-plugin-jpush-custom
 处理`jpush-phonegap-plugin`的`Android`厂商通道没有触发jpush.receiveNotification或者jpush.openNotification问题
 
-依赖`jpush-phonegap-plugin`，因此需要先安装并配置好极光厂商通道。
+依赖[jpush-phonegap-plugin](https://github.com/jpush/jpush-phonegap-plugin) ，因此需要先安装`jpush-phonegap-plugin`，并配置好极光厂商通道。
 
 使用方法如下
 
@@ -19,3 +19,6 @@ if (window.JPushCustomPlugin) {
 }
 ```
 
+服务端SDK发送消息， 需要添加`uri_activity`属性，即：`setUriActivity("com.xxx.MainActivity")`：
+
+参考开发：https://fugary.com/?p=342
