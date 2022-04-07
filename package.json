@@ -1,0 +1,17 @@
+{
+  "name": "cordova-plugin-jpush-custom",
+  "version": "1.0.0",
+  "description": "Cordova plugin for jpush",
+  "cordova": {
+    "id": "cordova-plugin-jpush-custom",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "gary.fu",
+  "license": "Apache2.0"
+}
