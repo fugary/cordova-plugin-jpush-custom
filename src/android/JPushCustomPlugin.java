@@ -2,6 +2,7 @@ package com.fugary.app.plugin.custom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -12,13 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import cn.jpush.android.api.JPushInterface;
-
 /**
  * Cordova插件，处理JPush厂商通道不能跳转问题
  *
@@ -27,7 +21,6 @@ import cn.jpush.android.api.JPushInterface;
 public class JPushCustomPlugin extends CordovaPlugin {
 
     private static final String TAG = JPushCustomPlugin.class.getSimpleName();
-    private static final List<String> IGNORED_EXTRAS_KEYS = Arrays.asList("cn.jpush.android.APPKEY");
     private Activity cordovaActivity;
     private JPushCustomPlugin instance;
     private String extraMessage;
@@ -45,25 +38,23 @@ public class JPushCustomPlugin extends CordovaPlugin {
         if (instance == null) {
             return;
         }
-        Map<String, Object> extrasMap = getNotificationExtras(cordovaActivity.getIntent());
-        extraMessage = (String) extrasMap.get("JMessageExtra");
+        extraMessage = getNotificationExtras(cordovaActivity.getIntent());
         LOG.i(TAG, "JPush Message: %s", extraMessage);
     }
 
-    protected Map<String, Object> getNotificationExtras(Intent intent) {
-        Map<String, Object> extrasMap = new HashMap<String, Object>();
-        if (intent != null && intent.getExtras() != null) {
-            for (String key : intent.getExtras().keySet()) {
-                if (!IGNORED_EXTRAS_KEYS.contains(key)) {
-                    if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
-                        extrasMap.put(key, intent.getIntExtra(key, 0));
-                    } else {
-                        extrasMap.put(key, intent.getStringExtra(key));
-                    }
-                }
+    protected String getNotificationExtras(Intent intent) {
+        String data = null;
+        if (intent != null) {
+            //获取华为平台附带的jpush信息
+            if (intent.getData() != null) {
+                data = intent.getData().toString();
+            }
+            //获取fcm/oppo/小米/vivo/魅族 平台附带的jpush信息
+            if (TextUtils.isEmpty(data) && intent.getExtras() != null) {
+                data = intent.getExtras().getString("JMessageExtra");
             }
         }
-        return extrasMap;
+        return data;
     }
 
     @Override
